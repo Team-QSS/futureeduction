@@ -7,7 +7,11 @@ public class DeleteLine : MonoBehaviour
     private void Update()
     {
         if (!Input.GetMouseButton(1)) return;
-        foreach (var triggerObject in _triggerObjects) Destroy(triggerObject);
+        foreach (var triggerObject in _triggerObjects)
+        {
+            DrawLine.Objects.Remove(triggerObject);
+            Destroy(triggerObject);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)

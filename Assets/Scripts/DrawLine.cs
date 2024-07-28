@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class DrawLine : MonoBehaviour
@@ -6,40 +8,41 @@ public class DrawLine : MonoBehaviour
 
     private Camera _mainCam;
     private LineRenderer _lr;
-
+    private readonly List<Vector2> _points = new();
+    private EdgeCollider2D _col;
+    public static readonly List<GameObject> Objects = new();
+    public static GameObject SavedObject;
+    
     private void Start()
     {
         _mainCam = GetComponent<Camera>();
     }
 
     private void Update()
-    private LineRenderer lr;
-    private List<Vector2> points = new List<Vector2>();
-    private EdgeCollider2D col;
-    void Update()
     {
+        if (Input.GetKeyDown(KeyCode.F12))
+        {
+            SavedObject = new GameObject();
+            foreach (var o in Objects) o.transform.parent = SavedObject.transform;
+            Objects.Clear();
+        }
         if (Input.GetMouseButtonDown(0))
         {
-            GameObject go = Instantiate(linePrefab);
-            lr = go.GetComponent<LineRenderer>();
-            col = go.GetComponent<EdgeCollider2D>();
-            points.Add(mainCam.ScreenToWorldPoint(Input.mousePosition));
-            lr.positionCount = 1;
-            lr.SetPosition(0, points[0]);
+            var go = Instantiate(linePrefab);
+            (_lr = go.GetComponent<LineRenderer>()).positionCount = 0;
+            _col = go.GetComponent<EdgeCollider2D>();
+            Objects.Add(go);
         }
-        else if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0))
         {
-            Vector2 pos = mainCam.ScreenToWorldPoint(Input.mousePosition);
-            
-            points.Add(pos);
-            lr.positionCount++;
-            lr.SetPosition(lr.positionCount-1,pos);
-            col.points = points.ToArray();
+            Vector2 pos = _mainCam.ScreenToWorldPoint(Input.mousePosition);
+            _points.Add(pos);
+            _lr.SetPosition(_lr.positionCount++,pos);
+            _col.points = _points.ToArray();
         }
         else if (Input.GetMouseButtonUp(0))
         {
-            points.Clear();
+            _points.Clear();
         }
-        
     }
 }
