@@ -1,21 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Net.NetworkInformation;
 using UnityEngine;
 
 public class DrawLine : MonoBehaviour
 {
-    [SerializeField] private Camera mainCam;
     public GameObject linePrefab;
+
+    private Camera _mainCam;
+    private LineRenderer _lr;
+
+    private void Start()
+    {
+        _mainCam = GetComponent<Camera>();
+    }
+
+    private void Update()
     private LineRenderer lr;
     private List<Vector2> points = new List<Vector2>();
     private EdgeCollider2D col;
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F12))
-        {
-            
-        }
         if (Input.GetMouseButtonDown(0))
         {
             GameObject go = Instantiate(linePrefab);
