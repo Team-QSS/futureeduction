@@ -7,6 +7,7 @@ public class DeleteLine : MonoBehaviour
     private void Update()
     {
         if (!Input.GetMouseButton(1)) return;
+        if(!UiManager.canEdit) return;
         foreach (var triggerObject in _triggerObjects)
         {
             DrawLine.Objects.Remove(triggerObject);

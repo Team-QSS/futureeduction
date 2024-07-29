@@ -20,16 +20,20 @@ public class DrawLine : MonoBehaviour
 
     private void Update()
     {
+        
         if (Input.GetKeyDown(KeyCode.F12))
         {
             SavedObject = new GameObject();
             foreach (var o in Objects) o.transform.parent = SavedObject.transform;
             Objects.Clear();
         }
+        if(!UiManager.canEdit) return;
         if (Input.GetMouseButtonDown(0))
         {
             var go = Instantiate(linePrefab);
             (_lr = go.GetComponent<LineRenderer>()).positionCount = 0;
+            (_lr = go.GetComponent<LineRenderer>()).startColor = ColorSelector.GetColor();
+            (_lr = go.GetComponent<LineRenderer>()).endColor = ColorSelector.GetColor();
             _col = go.GetComponent<EdgeCollider2D>();
             Objects.Add(go);
         }
@@ -44,5 +48,6 @@ public class DrawLine : MonoBehaviour
         {
             _points.Clear();
         }
+
     }
 }
