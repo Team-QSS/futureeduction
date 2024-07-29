@@ -1,5 +1,4 @@
 using System;
-using Unity.Mathematics;
 using UnityEngine;
 
 namespace PlayScene
@@ -10,39 +9,15 @@ namespace PlayScene
         private Rigidbody2D _rigid;
         [SerializeField] private float speed;
 
-        private void Start()
-        {
-            _horizontal = 0;
-            _rigid = gameObject.GetComponent<Rigidbody2D>();
-        }
+        private void Start() => _rigid = GetComponent<Rigidbody2D>();
 
-        private void Update()
-        {
-            if (Input.GetKey(KeyCode.A))
-            {
-                if (Input.GetKey(KeyCode.D))
-                {
-                    _horizontal = 0;
-                    return;
-                }
-                _horizontal = -1;
-            }
-            else if(Input.GetKey(KeyCode.D))
-            {
-                _horizontal = 1;
-            }
-            else
-            {
-                _horizontal = 0;
-            }
-        }
+        private void Update() => _horizontal = Input.GetKey(KeyCode.A) ? Input.GetKey(KeyCode.D) ? 0 : -1 : Input.GetKey(KeyCode.D) ? 1 : 0;
 
         private void FixedUpdate()
         {
             _rigid.velocity = new Vector2(_horizontal * speed, _rigid.velocity.y);
             var position = transform.position;
-            position = new Vector3(math.clamp(position.x, -8f, 8f), position.y);
-            transform.position = position;
+            transform.position = new Vector3(Math.Clamp(position.x, -8f, 8f), position.y);
         }
     }
 }
