@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DrawLine : MonoBehaviour
@@ -39,6 +40,11 @@ public class DrawLine : MonoBehaviour
         {
             Vector2 pos = _mainCam.ScreenToWorldPoint(Input.mousePosition);
             _points.Add(pos);
+            if (_lr.IsDestroyed())
+            {
+                _points.Clear();
+                return;
+            }
             _lr.SetPosition(_lr.positionCount++,pos);
             _col.points = _points.ToArray();
         }
