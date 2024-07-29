@@ -227,7 +227,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd73a6bd7b7eb3a468b8e57e9ad98457, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCam: {fileID: 519420031}
   linePrefab: {fileID: 8693872136346020156, guid: cb1e17ffc79cbea43a35b9bf85104c62, type: 3}
 --- !u!1001 &5544525527404712478
 PrefabInstance:
@@ -279,7 +278,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7879088509685668934, guid: 256bf116f5e9d1747b0682c8a20d85d0, type: 3}
       propertyPath: m_Name
-      value: curse
+      value: cursor
       objectReference: {fileID: 0}
     - target: {fileID: 8176355775357881138, guid: 256bf116f5e9d1747b0682c8a20d85d0, type: 3}
       propertyPath: mainCam
