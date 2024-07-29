@@ -7,7 +7,7 @@ public class DeleteLine : MonoBehaviour
     private readonly HashSet<GameObject> _triggerObjects = new();
     private void Update()
     {
-        if (!Input.GetMouseButton(1)) return;
+        if (!Input.GetMouseButton(1) || !UiManager.canEdit) return;
         foreach (var triggerObject in _triggerObjects.Where(triggerObject => DrawLine.Objects.Remove(triggerObject))) Destroy(triggerObject, 0.001f);
     }
 

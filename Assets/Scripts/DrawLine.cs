@@ -26,11 +26,14 @@ public class DrawLine : MonoBehaviour
             foreach (var o in Objects) o.transform.parent = SavedObject.transform;
             Objects.Clear();
         }
+        if(!UiManager.canEdit) return;
         if (Input.GetMouseButtonDown(0))
         {
             var go = Instantiate(linePrefab);
-            (_lr = go.GetComponent<LineRenderer>()).positionCount = 0;
             _col = go.GetComponent<EdgeCollider2D>();
+            (_lr = go.GetComponent<LineRenderer>()).positionCount = 0;
+            _lr.startColor = ColorSelector.GetColor();
+            _lr.endColor = ColorSelector.GetColor();
             Objects.Add(go);
         }
         if (Input.GetMouseButton(0))
@@ -44,5 +47,6 @@ public class DrawLine : MonoBehaviour
         {
             _points.Clear();
         }
+
     }
 }
