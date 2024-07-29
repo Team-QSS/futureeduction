@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1421070537386735293}
   - component: {fileID: -3688563892059895479}
   m_Layer: 0
-  m_Name: curse
+  m_Name: cursor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

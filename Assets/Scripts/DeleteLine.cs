@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class DeleteLine : MonoBehaviour
@@ -7,12 +8,7 @@ public class DeleteLine : MonoBehaviour
     private void Update()
     {
         if (!Input.GetMouseButton(1)) return;
-        if(!UiManager.canEdit) return;
-        foreach (var triggerObject in _triggerObjects)
-        {
-            DrawLine.Objects.Remove(triggerObject);
-            Destroy(triggerObject);
-        }
+        foreach (var triggerObject in _triggerObjects.Where(triggerObject => DrawLine.Objects.Remove(triggerObject))) Destroy(triggerObject, 0.001f);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
