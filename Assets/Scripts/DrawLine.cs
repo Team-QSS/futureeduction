@@ -33,8 +33,8 @@ public class DrawLine : MonoBehaviour
             var go = Instantiate(linePrefab);
             _col = go.GetComponent<EdgeCollider2D>();
             (_lr = go.GetComponent<LineRenderer>()).positionCount = 0;
-            _lr.startColor = ColorSelector.GetColor();
-            _lr.endColor = ColorSelector.GetColor();
+            _lr.startColor = ColorSelector.Script.ColorSelector.GetColor();
+            _lr.endColor = ColorSelector.Script.ColorSelector.GetColor();
             _lr.startWidth = slider.value;
             _lr.endWidth = slider.value;
             Objects.Add(go);

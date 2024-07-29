@@ -928,7 +928,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7879088509685668934, guid: 256bf116f5e9d1747b0682c8a20d85d0, type: 3}
       propertyPath: m_Name
-      value: curse (1)
+      value: cursor
       objectReference: {fileID: 0}
     - target: {fileID: 8176355775357881138, guid: 256bf116f5e9d1747b0682c8a20d85d0, type: 3}
       propertyPath: slider
