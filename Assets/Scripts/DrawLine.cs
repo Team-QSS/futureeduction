@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DrawLine : MonoBehaviour
 {
     public GameObject linePrefab;
-
+    [SerializeField] public Slider slider;
     private Camera _mainCam;
     private LineRenderer _lr;
     private readonly List<Vector2> _points = new();
@@ -34,6 +35,8 @@ public class DrawLine : MonoBehaviour
             (_lr = go.GetComponent<LineRenderer>()).positionCount = 0;
             _lr.startColor = ColorSelector.Script.ColorSelector.GetColor();
             _lr.endColor = ColorSelector.Script.ColorSelector.GetColor();
+            _lr.startWidth = slider.value;
+            _lr.endWidth = slider.value;
             Objects.Add(go);
         }
         if (Input.GetMouseButton(0))
