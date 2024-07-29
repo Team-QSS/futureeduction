@@ -9,6 +9,7 @@ public class UiManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        transform.GetChild(0).gameObject.SetActive(false);
         canEdit = true;
     }
 

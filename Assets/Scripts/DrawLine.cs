@@ -20,7 +20,6 @@ public class DrawLine : MonoBehaviour
 
     private void Update()
     {
-        
         if (Input.GetKeyDown(KeyCode.F12))
         {
             SavedObject = new GameObject();
@@ -31,10 +30,10 @@ public class DrawLine : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             var go = Instantiate(linePrefab);
-            (_lr = go.GetComponent<LineRenderer>()).positionCount = 0;
-            (_lr = go.GetComponent<LineRenderer>()).startColor = ColorSelector.GetColor();
-            (_lr = go.GetComponent<LineRenderer>()).endColor = ColorSelector.GetColor();
             _col = go.GetComponent<EdgeCollider2D>();
+            (_lr = go.GetComponent<LineRenderer>()).positionCount = 0;
+            _lr.startColor = ColorSelector.GetColor();
+            _lr.endColor = ColorSelector.GetColor();
             Objects.Add(go);
         }
         if (Input.GetMouseButton(0))

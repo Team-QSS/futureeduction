@@ -15,16 +15,15 @@ public class ColorSelector : MonoBehaviour {
 	float selectorAngle=0.0f;
 	Vector2 innerDelta=Vector2.zero;
 	static ColorSelector myslf;
-	private Vector2 startColor;
 	void Awake () {
 		myslf = this;
-		startColor = new Vector2(0.17f, -0.1f);
 	}
 	void Start () {
 		if (refCamera == null)
 			refCamera = Camera.main;
-		selectedColor = Color.black;
-		SelectInnerColor (startColor);
+		finalColor = Color.black;
+		innerDelta = new Vector2(0.17f, -0.1f);
+		SelectOuterColor(new Vector2(0, 0.2252683f));
 		finalColorSprite.color=finalColor;
 
 	}
