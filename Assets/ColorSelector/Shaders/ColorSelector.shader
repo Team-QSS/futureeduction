@@ -97,13 +97,12 @@ SubShader {
 		}
 		return col;
 	}
-	half4 frag (v2f i) : COLOR{		
-		half4 texcol;			   
+	half4 frag (v2f i) : COLOR{
 		half2 position =half2(i.uv.x,i.uv.y); 
 		half4 circleColor=DrawHSVCircle(position);			
 		circleColor=DrawTriangle(_Color,circleColor,i.uv);
 		
-		texcol = circleColor;
+		half4 texcol = circleColor;
 
 	    return texcol;
 	}

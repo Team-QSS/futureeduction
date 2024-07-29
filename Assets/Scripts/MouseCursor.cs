@@ -1,18 +1,18 @@
-using System;
 using UnityEngine;
 
 public class MouseCursor : MonoBehaviour
 {
-    [SerializeField] private Camera mainCam;
-    private SpriteRenderer sr;
+    private Camera _mainCam;
+    private SpriteRenderer _sr;
     private void Start()
     {
-        sr = GetComponent<SpriteRenderer>();
+        _sr = GetComponent<SpriteRenderer>();
+        _mainCam = Camera.main;
     }
 
     private void Update()
     {
-        sr.color = ColorSelector.GetColor();
-        transform.position = mainCam.ScreenToWorldPoint(Input.mousePosition) + Vector3.forward * 10;
+        _sr.color = ColorSelector.Script.ColorSelector.GetColor();
+        transform.position = _mainCam.ScreenToWorldPoint(Input.mousePosition) + Vector3.forward * 10;
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,14 +25,14 @@ public class DrawLine : MonoBehaviour
             foreach (var o in Objects) o.transform.parent = SavedObject.transform;
             Objects.Clear();
         }
-        if(!UiManager.canEdit) return;
+        if (!UiManager.CanEdit) return;
         if (Input.GetMouseButtonDown(0))
         {
             var go = Instantiate(linePrefab);
             _col = go.GetComponent<EdgeCollider2D>();
             (_lr = go.GetComponent<LineRenderer>()).positionCount = 0;
-            _lr.startColor = ColorSelector.GetColor();
-            _lr.endColor = ColorSelector.GetColor();
+            _lr.startColor = ColorSelector.Script.ColorSelector.GetColor();
+            _lr.endColor = ColorSelector.Script.ColorSelector.GetColor();
             Objects.Add(go);
         }
         if (Input.GetMouseButton(0))
@@ -43,10 +42,6 @@ public class DrawLine : MonoBehaviour
             _lr.SetPosition(_lr.positionCount++,pos);
             _col.points = _points.ToArray();
         }
-        else if (Input.GetMouseButtonUp(0))
-        {
-            _points.Clear();
-        }
-
+        else if (Input.GetMouseButtonUp(0)) _points.Clear();
     }
 }
