@@ -15,11 +15,16 @@ namespace PlayScene
             if (!DrawLine.SavedObject) return;
             var o = Instantiate(DrawLine.SavedObject, transform);
             o.transform.position = transform.position;
-            foreach (var c in o.GetComponentsInChildren<Collider2D>())
+            var col = o.AddComponent<CompositeCollider2D>();
+            col.geometryType = CompositeCollider2D.GeometryType.Polygons;
+            foreach (var c in o.GetComponentsInChildren<EdgeCollider2D>())
             {
-                c.GetComponent<LineRenderer>().widthMultiplier = 0.1f;
-                var col = c.gameObject.AddComponent<CompositeCollider2D>();
-                Destroy(c);
+                var line = c.GetComponent<LineRenderer>();
+                line.startWidth *= 0.1f;
+                line.endWidth *= 0.1f;
+                c.isTrigger = false;
+                c.edgeRadius = line.startWidth / 2;
+                c.usedByComposite = true;
             }
             o.transform.localScale = new Vector3(0.1f, 0.1f);
             Destroy(GetComponent<SpriteRenderer>());
