@@ -36,11 +36,11 @@ public class UiManager : MonoBehaviour
 
     public void ThemeSelectedWhite()
     {
-        if (Camera.main != null) Camera.main.backgroundColor = Color.white;
+        if (Camera.main) Camera.main.backgroundColor = Color.white;
     }
 
-    public void ThemeSeledtedBlack()
+    public void ThemeSelectedBlack()
     {
-        if (Camera.main != null) Camera.main.backgroundColor = Color.black;
+        if (Camera.main) Camera.main.backgroundColor = Color.black;
     }
 }

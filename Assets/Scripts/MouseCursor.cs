@@ -17,6 +17,5 @@ public class MouseCursor : MonoBehaviour
         _sr.color = ColorSelector.Script.ColorSelector.GetColor();
         transform.position = _mainCam.ScreenToWorldPoint(Input.mousePosition) + Vector3.forward * 10;
         gameObject.transform.localScale = new Vector3(slider.value, slider.value, 1);
-
     }
 }

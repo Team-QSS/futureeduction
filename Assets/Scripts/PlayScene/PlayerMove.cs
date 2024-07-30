@@ -18,7 +18,8 @@ namespace PlayScene
             foreach (var c in o.GetComponentsInChildren<Collider2D>())
             {
                 c.GetComponent<LineRenderer>().widthMultiplier = 0.1f;
-                c.isTrigger = false;
+                var col = c.gameObject.AddComponent<CompositeCollider2D>();
+                Destroy(c);
             }
             o.transform.localScale = new Vector3(0.1f, 0.1f);
             Destroy(GetComponent<SpriteRenderer>());
