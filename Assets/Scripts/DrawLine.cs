@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class DrawLine : MonoBehaviour
@@ -26,6 +27,9 @@ public class DrawLine : MonoBehaviour
             SavedObject = new GameObject();
             foreach (var o in Objects) o.transform.parent = SavedObject.transform;
             Objects.Clear();
+            DontDestroyOnLoad(SavedObject);
+            SavedObject.transform.position = new Vector3(0, -10000);
+            SceneManager.LoadScene("Play");
         }
         if (!UiManager.CanEdit) return;
         if (Input.GetMouseButtonDown(0))
