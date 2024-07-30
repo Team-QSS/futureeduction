@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class UiManager : MonoBehaviour
 {
+    //[SerializeField]private Camera mainCam;
     public static bool CanEdit;
     private void Start()
     {
@@ -31,5 +32,15 @@ public class UiManager : MonoBehaviour
     public void ExitHover()
     {
         CanEdit = true;
+    }
+
+    public void ThemeSelectedWhite()
+    {
+        if (Camera.main != null) Camera.main.backgroundColor = Color.white;
+    }
+
+    public void ThemeSeledtedBlack()
+    {
+        if (Camera.main != null) Camera.main.backgroundColor = Color.black;
     }
 }
