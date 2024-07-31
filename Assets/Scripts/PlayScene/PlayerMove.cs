@@ -15,8 +15,6 @@ namespace PlayScene
             if (!DrawLine.SavedObject) return;
             var o = Instantiate(DrawLine.SavedObject, transform);
             o.transform.position = transform.position;
-            var col = o.AddComponent<CompositeCollider2D>();
-            col.geometryType = CompositeCollider2D.GeometryType.Polygons;
             foreach (var c in o.GetComponentsInChildren<EdgeCollider2D>())
             {
                 var line = c.GetComponent<LineRenderer>();
@@ -24,17 +22,19 @@ namespace PlayScene
                 line.endWidth *= 0.1f;
                 c.isTrigger = false;
                 c.edgeRadius = line.startWidth / 2;
-                c.usedByComposite = true;
             }
             o.transform.localScale = new Vector3(0.1f, 0.1f);
             Destroy(GetComponent<SpriteRenderer>());
             Destroy(GetComponent<CircleCollider2D>());
         }
 
-        private void Update() =>
-            _horizontal = Input.GetKey(KeyCode.A) 
-                ? Input.GetKey(KeyCode.D) ? 0 : -1 
+        private void Update()
+        {
+            _horizontal = Input.GetKey(KeyCode.A)
+                ? Input.GetKey(KeyCode.D) ? 0 : -1
                 : Input.GetKey(KeyCode.D) ? 1 : 0;
+            
+        }
 
         private void FixedUpdate()
         {
