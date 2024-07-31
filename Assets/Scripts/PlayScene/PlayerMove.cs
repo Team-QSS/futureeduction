@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace PlayScene
@@ -15,14 +17,21 @@ namespace PlayScene
             if (!DrawLine.SavedObject) return;
             var o = Instantiate(DrawLine.SavedObject, transform);
             o.transform.position = transform.position;
-            foreach (var c in o.GetComponentsInChildren<EdgeCollider2D>())
+            var list = new HashSet<Vector2>();
+            var children = o.GetComponentsInChildren<EdgeCollider2D>();
+            float radius = 0;
+            foreach (var c in children)
             {
                 var line = c.GetComponent<LineRenderer>();
                 line.startWidth *= 0.1f;
                 line.endWidth *= 0.1f;
-                c.isTrigger = false;
-                c.edgeRadius = line.startWidth / 2;
+                radius = Math.Max(line.startWidth / 2, radius);
+                foreach (var point in c.points) if (list.All(p => (p - point).magnitude > radius * 20)) list.Add(point);
+                Destroy(c);
             }
+            var col = o.AddComponent<EdgeCollider2D>();
+            col.points = list.ToArray();
+            col.edgeRadius = radius;
             o.transform.localScale = new Vector3(0.1f, 0.1f);
             Destroy(GetComponent<SpriteRenderer>());
             Destroy(GetComponent<CircleCollider2D>());

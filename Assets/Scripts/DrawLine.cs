@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -10,7 +11,7 @@ public class DrawLine : MonoBehaviour
     [SerializeField] public Slider slider;
     private Camera _mainCam;
     private LineRenderer _lr;
-    private readonly List<Vector2> _points = new();
+    private readonly HashSet<Vector2> _points = new();
     private EdgeCollider2D _col;
     public static readonly List<GameObject> Objects = new();
     public static GameObject SavedObject;
@@ -46,13 +47,13 @@ public class DrawLine : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             Vector2 pos = _mainCam.ScreenToWorldPoint(Input.mousePosition);
-            _points.Add(pos);
             if (_lr.IsDestroyed())
             {
                 _points.Clear();
                 return;
             }
-            _lr.SetPosition(_lr.positionCount++,pos);
+            if (!_points.Contains(pos)) _lr.SetPosition(_lr.positionCount++,pos);
+            _points.Add(pos);
             _col.points = _points.ToArray();
         }
         else if (Input.GetMouseButtonUp(0)) _points.Clear();
