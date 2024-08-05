@@ -43,6 +43,12 @@ namespace PlayScene
         private void FixedUpdate()
         {
             _rigid.velocity = new Vector2(_horizontal * speed, _rigid.velocity.y);
+            _defaultObj.transform.rotation = Quaternion.Euler(0, _horizontal switch
+            {
+                1 => 0,
+                -1 => 180,
+                _ => _movingObjectTemp.transform.rotation.y
+            }, 0);
         }
         private IEnumerator MovingTick()
         {
@@ -60,7 +66,6 @@ namespace PlayScene
                             _movingObjectTemp = _moveObjectQueue.Dequeue();
                         }
                         _movingObjectTemp.SetActive(true);
-                        _movingObjectTemp.transform.rotation = Quaternion.Euler(0, _horizontal == 1 ? 0 : 180, 0);
                         break;
                     }
                     default:
