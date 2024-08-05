@@ -63,8 +63,8 @@ namespace PlayScene
                         if (_movingObjectTemp != _defaultObj)
                         {
                             _moveObjectQueue.Enqueue(_movingObjectTemp);
-                            _movingObjectTemp = _moveObjectQueue.Dequeue();
                         }
+                        _movingObjectTemp = _moveObjectQueue.Dequeue();
                         _movingObjectTemp.SetActive(true);
                         break;
                     }
