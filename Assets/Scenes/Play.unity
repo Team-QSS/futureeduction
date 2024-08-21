@@ -590,7 +590,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 20
-  jumpForce: 0
+  jumpForce: 300
   frameRate: 0.1
 --- !u!4 &1168526740
 Transform:
