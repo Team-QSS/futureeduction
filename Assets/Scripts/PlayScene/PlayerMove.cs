@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Cinemachine;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace PlayScene
@@ -14,9 +16,12 @@ namespace PlayScene
         private Queue<GameObject> _moveObjectQueue;
         private GameObject _defaultObj, _jumpObj, _movingObjectTemp;
         private bool isJumping = false;
+        private bool alive = true;
         [SerializeField] private float speed;
         [SerializeField] private float jumpForce;
         [SerializeField] private float frameRate;
+        [SerializeField] private CinemachineVirtualCamera vCam;
+        public static Vector2 PlayerPosition;
 
         private void Start()
         {
@@ -27,6 +32,7 @@ namespace PlayScene
             {
                 o.transform.parent = gameObject.transform;
                 o.transform.position = transform.position;
+                o.GetComponent<EdgeCollider2D>().enabled = true;
                 if (i > 1)
                 {
                     _moveObjectQueue.Enqueue(o);
@@ -43,19 +49,27 @@ namespace PlayScene
 
         private void Update()
         {
-            _horizontal = Input.GetKey(KeyCode.A)
-                ? Input.GetKey(KeyCode.D) ? 0 : -1
-                : Input.GetKey(KeyCode.D) ? 1 : 0;
-            gameObject.transform.localScale = _horizontal == 0
-                ? gameObject.transform.localScale
-                : new Vector3(-_horizontal, gameObject.transform.localScale.y);
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (alive)
             {
-                if (isOnGround && !isJumping) StartCoroutine(jump());
+                _horizontal = Input.GetKey(KeyCode.A)
+                    ? Input.GetKey(KeyCode.D) ? 0 : -1
+                    : Input.GetKey(KeyCode.D) ? 1 : 0;
+                gameObject.transform.localScale = _horizontal == 0
+                    ? gameObject.transform.localScale
+                    : new Vector3(-_horizontal, gameObject.transform.localScale.y);
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    if (isOnGround && !isJumping) StartCoroutine(jump());
+                }
+            }
+            else
+            {
+                _horizontal = 0;
             }
         }
         private void FixedUpdate()
         {
+            PlayerPosition = transform.position;
             _rigid.velocity = new Vector2(_horizontal * speed, _rigid.velocity.y);
         }
         private IEnumerator MovingTick()
@@ -102,14 +116,12 @@ namespace PlayScene
             _rigid.AddForce(Vector2.up * jumpForce);
             isJumping = true;
             _movingObjectTemp.SetActive(false);
-            Debug.Log($"disable {_movingObjectTemp.gameObject.name}");
             _jumpObj.SetActive(true);
             yield return new WaitForSeconds(0.5f); 
             while (!isOnGround)
             {
                 yield return null;
             }
-            Debug.Log($"Enable {_movingObjectTemp.gameObject.name}");
             _movingObjectTemp.SetActive(true);
             _jumpObj.SetActive(false);
             isJumping = false;
@@ -123,6 +135,45 @@ namespace PlayScene
                 if (!ray) return false;
                 return ray.transform.CompareTag("Floor");
             }
+        }
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.transform.CompareTag("enemy"))
+            {
+                if (math.abs(other.transform.position.x - transform.position.x) < 1f &&
+                    transform.position.y - other.transform.position.y > 0.3f)
+                {
+                    other.transform.parent.GetComponent<EnemyCode>().Death();
+                }
+                else
+                {
+                    if(alive)
+                        StartCoroutine(Death());
+                }
+            }
+            else if (other.transform.CompareTag("Goal"))
+                Goal();
+            
+        }
+        private void Goal()
+        {
+            
+        }
+        private IEnumerator Death()
+        {
+            speed = 0;
+            alive = false;
+            _rigid.velocity = new Vector2(0f, 0f);
+            yield return new WaitForSeconds(0.5f);
+            _rigid.AddForce(new Vector2(0f,jumpForce));
+            gameObject.GetComponent<BoxCollider2D>().enabled = false;
+            foreach (var o in gameObject.transform.GetComponentsInChildren<EdgeCollider2D>())
+            {
+                o.enabled = false;
+            }
+            vCam.Follow = null;
+            yield return null;
         }
     }
 }

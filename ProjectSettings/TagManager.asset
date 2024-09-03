@@ -7,11 +7,13 @@ TagManager:
   - line
   - ui
   - Floor
+  - enemy
+  - Goal
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - hitbox
   - Water
   - UI
   - Button
