@@ -148,7 +148,7 @@ namespace PlayScene
                 }
                 else
                 {
-                    if(alive)
+                    if(alive && other.transform.parent.GetComponent<EnemyCode>().alive)
                         StartCoroutine(Death());
                 }
             }

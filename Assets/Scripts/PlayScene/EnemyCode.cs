@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class EnemyCode : MonoBehaviour
 {
     [SerializeField] private bool _goingLeft;
     private Rigidbody2D _rigid;
-    private bool _alive = true;
+    public bool alive = true;
     private RaycastHit2D _ray;
     [SerializeField] private float speed;
     void Start()
@@ -17,14 +18,14 @@ public class EnemyCode : MonoBehaviour
 
     public void Death()
     {
-        _alive = false;
+        alive = false;
         transform.localScale = new Vector2(1, 0.4f);
         speed = 0;
-        gameObject.GetComponent<BoxCollider2D>().enabled = false;
+        gameObject.GetComponentInChildren<BoxCollider2D>().enabled = false;
     }
     private IEnumerator Moving()
     {
-        while (_alive)
+        while (alive)
         {
             _ray = Physics2D.Raycast(transform.position, _goingLeft ? Vector2.left : Vector2.right, 2f, LayerMask.GetMask("Floor"));
             if (_ray.collider && _ray.collider.CompareTag("Floor"))
