@@ -7,6 +7,7 @@ public class UiManager : MonoBehaviour
     private void Start()
     {
         transform.GetChild(0).gameObject.SetActive(false);
+        transform.GetChild(1).gameObject.SetActive(true);
         CanEdit = true;
     }
     

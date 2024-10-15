@@ -17,11 +17,11 @@ namespace ColorSelector.Script
 
 		private void Awake () {
 			_instance = this;
+			_finalColor = Color.black;
 		}
 
 		private void Start () {
 			if (!refCamera) refCamera = Camera.main;
-			_finalColor = Color.black;
 			SelectOuterColor(new Vector2(0, 0.2252683f));
 			finalColorSprite.color = _finalColor;
 		}

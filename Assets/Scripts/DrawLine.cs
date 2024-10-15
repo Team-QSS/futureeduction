@@ -16,10 +16,15 @@ public class DrawLine : MonoBehaviour
     private EdgeCollider2D _col;
     public static readonly List<GameObject> Objects = new();
     public static GameObject SavedObject;
-    public static List<GameObject> Animations = new();
+    public static List<GameObject> Animations = null;
     private ObjectSelectManager _objSelectManager;
-    
-    
+
+
+    private void Awake()
+    {
+        Animations = new List<GameObject>();
+    }
+
     private void Start()
     {
         _objSelectManager = GetComponent<ObjectSelectManager>();
