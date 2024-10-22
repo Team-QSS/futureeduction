@@ -5,6 +5,8 @@ using System.Linq;
 using Cinemachine;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 namespace PlayScene
 {
@@ -17,18 +19,20 @@ namespace PlayScene
         private GameObject _defaultObj, _jumpObj, _movingObjectTemp;
         private bool isJumping = false;
         private bool alive = true;
+        private bool deathIng = false;
         [SerializeField] private float speed;
         [SerializeField] private float jumpForce;
         [SerializeField] private float frameRate;
         [SerializeField] private CinemachineVirtualCamera vCam;
         public static Vector2 PlayerPosition;
-
+        
         private void Start()
         {
+            FadeManager.Instance.FadeIn();
             _rigid = GetComponent<Rigidbody2D>();
             _moveObjectQueue = new Queue<GameObject>();
             var i = 0;
-            foreach (var o in DrawLine.Animations)
+            foreach (var o in AnimHolder.Instance.animations)
             {
                 o.transform.parent = gameObject.transform;
                 o.transform.position = transform.position;
@@ -66,11 +70,50 @@ namespace PlayScene
             {
                 _horizontal = 0;
             }
+            
+            if (transform.position.y < -25 && !deathIng)
+            {
+                StartCoroutine(DeathDelay());
+            }
+        }
+        IEnumerator DeathDelay()
+        {
+            deathIng = true;
+            FadeManager.Instance.FadeIn();
+            yield return new WaitForSeconds(1f);
+            foreach (var o in AnimHolder.Instance.animations)
+            {
+                o.transform.parent = null;
+                DontDestroyOnLoad(o);
+                o.gameObject.SetActive(true);
+            }
+            SceneManager.LoadScene("Play");
         }
         private void FixedUpdate()
         {
             PlayerPosition = transform.position;
             _rigid.velocity = new Vector2(_horizontal * speed, _rigid.velocity.y);
+        }
+
+        public void GoToDraw()
+        {
+            FadeManager.Instance.FadeIn();
+            AnimHolder.Instance.DrawSizing();//그리기 크기로 
+            Time.timeScale = 1;
+            for (int e = 0; e < gameObject.transform.childCount;)
+            {
+                var o = gameObject.transform.GetChild(e);
+                o.parent = null;
+                DontDestroyOnLoad(o);
+            }
+            SceneManager.LoadScene("SampleScene");
+        }
+
+        public void GoToStart()
+        {
+            Time.timeScale = 1;
+            Destroy(AnimHolder.Instance.gameObject);
+            SceneManager.LoadScene("LoadScene");
         }
         private IEnumerator MovingTick()
         {
@@ -148,8 +191,9 @@ namespace PlayScene
                 }
                 else
                 {
-                    if(alive && other.transform.parent.GetComponent<EnemyCode>().alive)
-                        StartCoroutine(Death());
+                    if (!alive || !other.transform.parent.GetComponent<EnemyCode>().alive) return;
+                    StartCoroutine(Death());
+
                 }
             }
             else if (other.transform.CompareTag("Goal"))

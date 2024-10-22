@@ -16,17 +16,27 @@ public class DrawLine : MonoBehaviour
     private EdgeCollider2D _col;
     public static readonly List<GameObject> Objects = new();
     public static GameObject SavedObject;
-    public static List<GameObject> Animations = null;
+    public List<GameObject> Animations = null;
     private ObjectSelectManager _objSelectManager;
 
 
     private void Awake()
     {
         Animations = new List<GameObject>();
+        var o = AnimHolder.Instance.animations[0];
+        var i = o.transform.childCount;
+        for (var j = 0; j < i; j++)
+        {
+            Objects.Add(o.transform.GetChild(j).gameObject);
+        }
     }
 
     private void Start()
     {
+        foreach (var o in AnimHolder.Instance.animations)
+        {
+            o.SetActive(true);
+        }
         _objSelectManager = GetComponent<ObjectSelectManager>();
         _mainCam = GetComponent<Camera>();
     }
@@ -36,37 +46,6 @@ public class DrawLine : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F12))
         {
             SaveAction();
-        }
-
-        if (Input.GetKeyDown(KeyCode.F11))
-        {
-            SaveAction();
-            foreach (var SavedObject in _objSelectManager.animObjects)
-            {
-                SavedObject.transform.localScale = new Vector3(0.2f, 0.2f);
-                var list = new HashSet<Vector2>();
-                var children = SavedObject.GetComponentsInChildren<EdgeCollider2D>();
-                float radius = 0;
-                foreach (var c in children)
-                {
-                    if (c.gameObject != SavedObject)
-                    {
-                        var line = c.GetComponent<LineRenderer>();
-                        line.startWidth = 0.1f;
-                        line.endWidth = 0.1f;
-                        radius = Math.Max(line.startWidth / 2, radius);
-                        foreach (var point in c.points) if (list.All(p => (p - point).magnitude > radius * 20)) list.Add(point);
-                        Destroy(c);
-                    }
-                }
-                var col = SavedObject.AddComponent<EdgeCollider2D>();
-                col.points = list.ToArray();
-                col.edgeRadius = radius;
-                Destroy(GetComponent<SpriteRenderer>());
-                Destroy(GetComponent<CircleCollider2D>());
-                Animations.Add(SavedObject);
-            }
-            SceneManager.LoadScene("Play");
         }
             
         if (!UiManager.CanEdit) return;
@@ -96,9 +75,39 @@ public class DrawLine : MonoBehaviour
         else if (Input.GetMouseButtonUp(0)) _points.Clear();
     }
 
+    public void Submit()
+    {
+        SaveAction();
+        AnimHolder.Instance.InGameSizing();//크기 인게임 크기로 변경
+        foreach (var o in AnimHolder.Instance.animations)
+        {
+            var list = new HashSet<Vector2>();
+            var children = o.GetComponentsInChildren<EdgeCollider2D>();
+            float radius = 0;
+            foreach (var c in children)
+            {
+                if (c.gameObject != o)
+                {
+                    var line = c.GetComponent<LineRenderer>();
+                    line.startWidth = 0.1f;
+                    line.endWidth = 0.1f;
+                    radius = Math.Max(line.startWidth / 2, radius);
+                    foreach (var point in c.points) if (list.All(p => (p - point).magnitude > radius * 20)) list.Add(point);
+                }
+            }
+            Destroy(o.GetComponent<EdgeCollider2D>());
+            var col = o.AddComponent<EdgeCollider2D>();
+            col.points = list.ToArray();
+            col.edgeRadius = radius;
+            Destroy(GetComponent<SpriteRenderer>());
+            Destroy(GetComponent<CircleCollider2D>());
+        }
+        SceneManager.LoadScene("Play");
+    }
+
     public void SaveAction()
     {
-        SavedObject = _objSelectManager.animObjects[_objSelectManager._editingTemp];
+        SavedObject = AnimHolder.Instance.animations[_objSelectManager._editingTemp];
         foreach (var o in Objects) o.transform.parent = SavedObject.transform;
         Objects.Clear();
     }

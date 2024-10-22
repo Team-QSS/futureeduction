@@ -9,7 +9,6 @@ public class ObjectSelectManager : MonoBehaviour
 {
     [SerializeField] private TMP_Dropdown dropDown;
     [SerializeField] private DrawLine _drawLine;
-    [SerializeField] public GameObject[] animObjects;
     public int _editingTemp;
     enum ObjectName
     {
@@ -21,20 +20,18 @@ public class ObjectSelectManager : MonoBehaviour
     }
     private void Start()
     {
-        _editingTemp = (int)ObjectName.Default;
+        int index = dropDown.value;
+        AnimHolder.Instance.animations[index].transform.position = new Vector3(0, 0);
+        _editingTemp = index;
         _drawLine = GetComponent<DrawLine>();
-        foreach (var o in animObjects)
-        {
-            DontDestroyOnLoad(o);
-        }
     }
 
     public void DropDownChange()
     {
         _drawLine.SaveAction();
         int index = dropDown.value;
-        animObjects[index].transform.position = new Vector3(0, 0);
-        animObjects[_editingTemp].transform.position = new Vector3(0, 0, -10);
+        AnimHolder.Instance.animations[index].transform.position = new Vector3(0, 0);
+        AnimHolder.Instance.animations[_editingTemp].transform.position = new Vector3(0, 0, -10);
         _editingTemp = index;
     }
 }
