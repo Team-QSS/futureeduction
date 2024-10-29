@@ -24,6 +24,7 @@ namespace PlayScene
         [SerializeField] private float jumpForce;
         [SerializeField] private float frameRate;
         [SerializeField] private CinemachineVirtualCamera vCam;
+        [SerializeField] private GameObject clearUI;
         public static Vector2 PlayerPosition;
         
         private void Start()
@@ -60,7 +61,7 @@ namespace PlayScene
                     : Input.GetKey(KeyCode.D) ? 1 : 0;
                 gameObject.transform.localScale = _horizontal == 0
                     ? gameObject.transform.localScale
-                    : new Vector3(-_horizontal, gameObject.transform.localScale.y);
+                    : new Vector3(_horizontal, gameObject.transform.localScale.y);
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
                     if (isOnGround && !isJumping) StartCoroutine(jump());
@@ -81,6 +82,11 @@ namespace PlayScene
             deathIng = true;
             FadeManager.Instance.FadeIn();
             yield return new WaitForSeconds(1f);
+            Replay();
+        }
+        public void Replay()
+        {
+            gameObject.transform.localScale = new Vector3(1, 1, 1);
             foreach (var o in AnimHolder.Instance.animations)
             {
                 o.transform.parent = null;
@@ -97,6 +103,7 @@ namespace PlayScene
 
         public void GoToDraw()
         {
+            gameObject.transform.localScale = new Vector3(1, 1, 1);
             FadeManager.Instance.FadeIn();
             AnimHolder.Instance.DrawSizing();//그리기 크기로 
             Time.timeScale = 1;
@@ -174,9 +181,8 @@ namespace PlayScene
         {
             get
             {
-                RaycastHit2D ray = Physics2D.Raycast(transform.position, Vector2.down, 1.5f, LayerMask.GetMask("Floor"));
-                if (!ray) return false;
-                return ray.transform.CompareTag("Floor");
+                var ray = Physics2D.Raycast(transform.position, Vector2.down, 1.5f, LayerMask.GetMask("Floor"));
+                return ray && ray.transform.CompareTag("Floor");
             }
         }
 
@@ -202,9 +208,9 @@ namespace PlayScene
         }
         private void Goal()
         {
-            
+            clearUI.SetActive(true);
         }
-        private IEnumerator Death()
+        IEnumerator Death()
         {
             speed = 0;
             alive = false;

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using PlayScene;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
 public class toggleControl : MonoBehaviour
@@ -23,5 +25,4 @@ public class toggleControl : MonoBehaviour
             ui.SetActive(true);
         }
     }
-    
 }
