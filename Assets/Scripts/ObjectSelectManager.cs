@@ -32,6 +32,10 @@ public class ObjectSelectManager : MonoBehaviour
         int index = dropDown.value;
         AnimHolder.Instance.animations[index].transform.position = new Vector3(0, 0);
         AnimHolder.Instance.animations[_editingTemp].transform.position = new Vector3(0, 0, -10);
+        foreach (var o in AnimHolder.Instance.animations[index].GetComponentsInChildren<Transform>())
+        {
+            DrawLine.Objects.Add(o.gameObject);
+        }
         _editingTemp = index;
     }
 }
